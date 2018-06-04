@@ -45,13 +45,18 @@ Panic over! Plant has water again :)
 
 def send_email(smtp_message):
     try:
-        smtpObj = smtplib.SMTP(smtp_host, smtp_port)
-        # If you don't need to login to your smtp provider, simply remove this line:
-        smtpObj.login(smtp_username, smtp_password)
-        smtpObj.sendmail(smtp_sender, smtp_receivers, smtp_message)
+        server = smtplib.SMTP(smtp_host, smtp_port)
+        server.ehlo()
+        server.starttls()
+        #  stmplib docs recommend calling ehlo() before & after starttls()
+        server.ehlo()
+        server.login(smtp_username, smtp_password)
+        server.sendmail(smtp_sender, smtp_receivers, smtp_message)
+        server.close
         print("Successfully sent email")
-    except smtplib.SMTPException:
-        print("Error: unable to send email")
+    # Display an error message if something goes wrong.
+    except Exception as e:
+        print("Error: ", e)
 
 # This is our callback function, this function will be called every time there is a change on the specified GPIO
 # channel, in this example we are using 17
@@ -84,3 +89,6 @@ GPIO.add_event_callback(channel, callback)
 while True:
     # This line simply tells our script to wait 0.1 of a second, this is so the script doesnt hog all of the CPU
     time.sleep(0.1)
+
+#send_email(message_alive)
+#send_email(message_dead)
