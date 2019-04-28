@@ -18,7 +18,6 @@ DBNAME = 'tutorial'
 
 def main(host='localhost', port=8086, nb_day=15):
     """Instantiate a connection to the backend."""
-    nb_day = 15  # number of day to generate time series
     timeinterval_min = 5  # create an event every x minutes
     total_minutes = 1440 * nb_day
     total_records = int(total_minutes / timeinterval_min)
